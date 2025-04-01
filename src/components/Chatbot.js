@@ -6,12 +6,13 @@ const API_URL = "https://confident-flexibility-production.up.railway.app/chat";
 const Chatbot = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-  const sessionId = useRef(Date.now().toString()); // ← ✅ Now it's inside the component
+  const sessionId = useRef(Date.now().toString()); // Unique session ID
 
   const sendMessage = async () => {
     if (!input.trim()) return;
 
     const userMessage = { sender: "You", text: input };
+    // Add the user message once
     setMessages((prev) => [...prev, userMessage]);
 
     try {
@@ -22,11 +23,11 @@ const Chatbot = () => {
 
       if (response.status === 200 && response.data.response) {
         const botMessage = { sender: "Bot", text: response.data.response };
-        setMessages((prev) => [...prev, userMessage, botMessage]);
+        // Append only the bot message
+        setMessages((prev) => [...prev, botMessage]);
       } else {
         setMessages((prev) => [
           ...prev,
-          userMessage,
           { sender: "Bot", text: "No response from server." },
         ]);
       }
@@ -34,7 +35,6 @@ const Chatbot = () => {
       console.error("Error:", error);
       setMessages((prev) => [
         ...prev,
-        userMessage,
         { sender: "Bot", text: "Error fetching response." },
       ]);
     }
@@ -59,9 +59,7 @@ const Chatbot = () => {
             style={{ textAlign: msg.sender === "You" ? "right" : "left" }}
           >
             <strong>{msg.sender}:</strong>{" "}
-            {typeof msg.text === "object"
-              ? JSON.stringify(msg.text)
-              : msg.text}
+            {typeof msg.text === "object" ? JSON.stringify(msg.text) : msg.text}
           </div>
         ))}
       </div>
