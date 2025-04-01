@@ -11,11 +11,10 @@
     "web-vitals": "^4.2.4"
   },
   "scripts": {
-    "start": "serve -s build",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
+  "start": "serve -s build -l tcp://0.0.0.0:$PORT",
+  "build": "react-scripts build"
+}
+,
   "homepage": ".",
   "eslintConfig": {
     "extends": [
